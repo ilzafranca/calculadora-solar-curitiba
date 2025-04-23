@@ -7,81 +7,91 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4fbf4;
-      padding: 40px;
-      color: #003300;
+      background: #f4fdf7;
+      padding: 20px;
     }
     h1 {
-      color: green;
+      color: darkgreen;
     }
-    input, select, button {
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      max-width: 500px;
-      font-size: 16px;
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 300px;
+      padding: 8px;
+      margin-top: 5px;
     }
     button {
+      margin-top: 15px;
       background-color: green;
       color: white;
+      padding: 10px 20px;
       border: none;
       cursor: pointer;
+      font-weight: bold;
     }
-    .resultado {
-      background-color: #e8f9e8;
+    #resultado {
+      margin-top: 30px;
       padding: 20px;
-      margin-top: 20px;
-      max-width: 600px;
+      background: #e8f9ed;
       border-radius: 10px;
-      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
     }
-    .emoji {
-      font-size: 20px;
+    .alerta {
+      margin-top: 10px;
+      color: #a94442;
+      background-color: #f2dede;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Calculadora Solar - Curitiba</h1>
-  <p>Preencha os dados abaixo para ver a estimativa com base em valores reais de Curitiba:</p>
 
-  <label for="consumo">Média de consumo mensal (kWh):</label><br>
-  <input type="number" id="consumo" value="450" /><br>
+  <label for="consumo">Média de consumo mensal (kWh):</label>
+  <input type="number" id="consumo" value="450"/>
 
-  <label for="tipo">Tipo de imóvel:</label><br>
+  <label for="tipo">Tipo de imóvel:</label>
   <select id="tipo">
-    <option value="Residencial" selected>Residencial</option>
-    <option value="Comercial">Comercial</option>
-  </select><br>
+    <option>Residencial</option>
+    <option>Comercial</option>
+    <option>Industrial</option>
+  </select>
 
   <button onclick="calcular()">Calcular</button>
 
-  <div class="resultado" id="resultado"></div>
+  <div id="resultado"></div>
 
   <script>
     function calcular() {
       const consumo = parseFloat(document.getElementById("consumo").value);
       const tipo = document.getElementById("tipo").value;
-      const resultadoDiv = document.getElementById("resultado");
 
-      if (isNaN(consumo) || consumo <= 0) {
-        resultadoDiv.innerHTML = "Por favor, insira um valor válido de consumo.";
-        return;
+      const kWhPorPlaca = 50; // geração média mensal em Curitiba
+      const precoPorPlaca = 1600;
+      const economiaPorPlaca = 45; // estimativa média de economia mensal
+
+      const placas = Math.ceil(consumo / kWhPorPlaca);
+      const investimento = placas * precoPorPlaca;
+      const economia = placas * economiaPorPlaca;
+      const retorno = (investimento / economia).toFixed(1);
+
+      let resultadoHTML = `
+        <p>⚡️ <strong>Consumo mensal:</strong> ${consumo} kWh</p>
+        <p>🏠 <strong>Tipo de imóvel:</strong> ${tipo}</p>
+        <p>🔋 <strong>Placas necessárias:</strong> ${placas}</p>
+        <p>💰 <strong>Investimento estimado:</strong> R$ ${investimento.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
+        <p>📉 <strong>Economia mensal:</strong> R$ ${economia.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
+        <p>⏳ <strong>Retorno estimado:</strong> ${retorno} anos</p>
+      `;
+
+      if (retorno > 10) {
+        resultadoHTML += `<div class="alerta">⚠️ O tempo de retorno é superior a 10 anos. Verifique se o investimento é viável para o seu caso.</div>`;
       }
 
-      // Simulação baseada em valores fixos reais para Curitiba
-      const placas = Math.ceil(consumo / 50); // Aproximadamente 50 kWh por placa
-      const investimento = placas * 1600; // R$1600 por placa instalada
-      const economiaMensal = placas * 45; // Economia média mensal por placa
-      const retorno = investimento / economiaMensal;
-
-      resultadoDiv.innerHTML = `
-        <div class="emoji">⚡️</div> <strong>Consumo mensal:</strong> ${consumo} kWh<br>
-        <div class="emoji">🏠</div> <strong>Tipo de imóvel:</strong> ${tipo}<br>
-        <div class="emoji">🔋</div> <strong>Placas necessárias:</strong> ${placas}<br>
-        <div class="emoji">💰</div> <strong>Investimento estimado:</strong> R$ ${investimento.toFixed(2).replace('.', ',')}<br>
-        <div class="emoji">📉</div> <strong>Economia mensal:</strong> R$ ${economiaMensal.toFixed(2).replace('.', ',')}<br>
-        <div class="emoji">⏳</div> <strong>Retorno estimado:</strong> ${retorno.toFixed(1).replace('.', ',')} anos<br>
-      `;
+      document.getElementById("resultado").innerHTML = resultadoHTML;
     }
   </script>
 </body>
