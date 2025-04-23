@@ -1,21 +1,23 @@
 import streamlit as st
 import math
 
+# Configuração da página
 st.set_page_config(page_title="Simulador Solar Curitiba", page_icon="🌞")
-
 st.title("🌞 Simulador de Energia Solar - Curitiba")
+
+# Introdução
 st.markdown("""
 Este simulador estima o número de placas solares necessárias, o investimento aproximado e o tempo de retorno com base no seu consumo mensal (kWh).
 """)
 
 # Entradas do usuário
 consumo_kwh = st.number_input("⚡ Consumo mensal (kWh):", min_value=1, step=1, value=64)
-tipo_imovel = st.selectbox("🏠 Tipo de imóvel:", ["Residencial", "Comercial", "Industrial"])
+tipo_imovel = st.selectbox("🏡 Tipo de imóvel:", ["Residencial", "Comercial", "Industrial"])
 
-# Preço médio por placa instalada em Curitiba
-preco_placa = 1600  # R$ por placa
+# Parâmetros do cálculo
+preco_placa = 1600  # R$ por placa instalada (média Curitiba)
 producao_por_placa = 50  # kWh/mês por placa solar padrão
-custo_kwh = 0.77  # R$ por kWh (baseado na conta da Copel)
+custo_kwh = 0.77  # R$ por kWh (Copel)
 
 # Cálculos
 placas_necessarias = math.ceil(consumo_kwh / producao_por_placa)
@@ -36,5 +38,5 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Rodapé
-st.markdown("---")
-st.markdown("Desenvolvido por **Lalinha 🌻 - Curitiba 2025**")
+st.markdown("----")
+st.markdown("Desenvolvido por **Lalinha 🌻** - Curitiba 2025")
