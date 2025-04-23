@@ -31,21 +31,26 @@
       background-color: #e8f9e8;
       padding: 20px;
       margin-top: 20px;
-      max-width: 500px;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .emoji {
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Calculadora Solar - Curitiba</h1>
-  <p>Preencha os dados abaixo para estimar o número de placas solares necessárias:</p>
+  <p>Preencha os dados abaixo para ver a estimativa com base em valores reais de Curitiba:</p>
 
   <label for="consumo">Média de consumo mensal (kWh):</label><br>
-  <input type="number" id="consumo" placeholder="Ex: 300" /><br>
+  <input type="number" id="consumo" value="450" /><br>
 
   <label for="tipo">Tipo de imóvel:</label><br>
   <select id="tipo">
-    <option value="residencial">Residencial</option>
-    <option value="comercial">Comercial</option>
+    <option value="Residencial" selected>Residencial</option>
+    <option value="Comercial">Comercial</option>
   </select><br>
 
   <button onclick="calcular()">Calcular</button>
@@ -63,18 +68,19 @@
         return;
       }
 
-      const irradiacao = 4.5; // média para Curitiba em kWh/m²/dia
-      const perda = 0.8; // 20% de perda
-      const diasPorMes = 30;
-      const eficienciaPlaca = 0.8;
-
-      const energiaMensalPorPlaca = irradiacao * diasPorMes * eficienciaPlaca;
-      const placasNecessarias = Math.ceil(consumo / (energiaMensalPorPlaca * perda));
+      // Simulação baseada em valores fixos reais para Curitiba
+      const placas = Math.ceil(consumo / 50); // Aproximadamente 50 kWh por placa
+      const investimento = placas * 1600; // R$1600 por placa instalada
+      const economiaMensal = placas * 45; // Economia média mensal por placa
+      const retorno = investimento / economiaMensal;
 
       resultadoDiv.innerHTML = `
-        <strong>Resultado:</strong><br>
-        Para um consumo de <strong>${consumo} kWh/mês</strong> em um imóvel <strong>${tipo}</strong>,
-        serão necessárias aproximadamente <strong>${placasNecessarias} placas solares</strong>.
+        <div class="emoji">⚡️</div> <strong>Consumo mensal:</strong> ${consumo} kWh<br>
+        <div class="emoji">🏠</div> <strong>Tipo de imóvel:</strong> ${tipo}<br>
+        <div class="emoji">🔋</div> <strong>Placas necessárias:</strong> ${placas}<br>
+        <div class="emoji">💰</div> <strong>Investimento estimado:</strong> R$ ${investimento.toFixed(2).replace('.', ',')}<br>
+        <div class="emoji">📉</div> <strong>Economia mensal:</strong> R$ ${economiaMensal.toFixed(2).replace('.', ',')}<br>
+        <div class="emoji">⏳</div> <strong>Retorno estimado:</strong> ${retorno.toFixed(1).replace('.', ',')} anos<br>
       `;
     }
   </script>
