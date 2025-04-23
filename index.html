@@ -1,47 +1,40 @@
 import streamlit as st
 import math
 
-st.set_page_config(page_title="Simulador Solar Curitiba", page_icon="🔆")
-st.title("🔆 Simulador de Energia Solar - Curitiba")
+st.set_page_config(page_title="Simulador Solar Curitiba", page_icon="🌞")
+
+st.title("🌞 Simulador de Energia Solar - Curitiba")
 st.markdown("""
-Este simulador estima o número de placas solares necessárias, o investimento aproximado e o tempo de retorno com base no seu consumo mensal.
+Este simulador estima o número de placas solares necessárias, o investimento aproximado e o tempo de retorno com base no seu consumo mensal (kWh).
 """)
 
 # Entradas do usuário
 consumo_kwh = st.number_input("⚡ Consumo mensal (kWh):", min_value=1, step=1, value=64)
 tipo_imovel = st.selectbox("🏠 Tipo de imóvel:", ["Residencial", "Comercial", "Industrial"])
 
-# Preço médio por placa instalada em Curitiba (baseado em fontes de mercado)
-preco_placa = 1600
-
-# Considerações gerais
+# Preço médio por placa instalada em Curitiba
+preco_placa = 1600  # R$ por placa
 producao_por_placa = 50  # kWh/mês por placa solar padrão
-custo_kwh = 0.77  # R$ por kWh (estimativa baseada na conta de energia Copel)
+custo_kwh = 0.77  # R$ por kWh (baseado na conta da Copel)
 
 # Cálculos
 placas_necessarias = math.ceil(consumo_kwh / producao_por_placa)
 investimento_total = placas_necessarias * preco_placa
 economia_mensal = consumo_kwh * custo_kwh
-
-if economia_mensal == 0:
-    retorno_anos = 0
-else:
-    retorno_anos = investimento_total / (economia_mensal * 12)
+retorno_anos = 0 if economia_mensal == 0 else investimento_total / (economia_mensal * 12)
 
 # Resultados
-st.markdown("""
-<div style="background-color:#eaffea; padding:20px; border-radius:10px">
-    <p><b>⚡ Consumo mensal:</b> {0} kWh</p>
-    <p><b>🏠 Tipo de imóvel:</b> {1}</p>
-    <p><b>🔋 Placas necessárias:</b> {2}</p>
-    <p><b>💰 Investimento estimado:</b> R$ {3:,.2f}</p>
-    <p><b>📉 Economia mensal:</b> R$ {4:,.2f}</p>
-    <p><b>⏳ Retorno estimado:</b> {5:.1f} anos</p>
+st.markdown(f"""
+<div style="background-color:#eaffea; padding:20px; border-radius:10px;">
+<b>⚡ Consumo mensal:</b> {consumo_kwh} kWh  <br>
+<b>🏠 Tipo de imóvel:</b> {tipo_imovel}  <br>
+<b>🔋 Placas necessárias:</b> {placas_necessarias}  <br>
+<b>💰 Investimento estimado:</b> R$ {investimento_total:,.2f}  <br>
+<b>📉 Economia mensal:</b> R$ {economia_mensal:,.2f}  <br>
+<b>⏳ Retorno estimado:</b> {retorno_anos:.1f} anos
 </div>
-""".format(consumo_kwh, tipo_imovel, placas_necessarias, investimento_total, economia_mensal, retorno_anos), unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # Rodapé
-st.markdown("""
----
-Desenvolvido por Lalinha ☀️ Curitiba 2025
-""")
+st.markdown("---")
+st.markdown("Desenvolvido por **Lalinha 🌻 - Curitiba 2025**")
