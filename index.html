@@ -1,98 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calculadora Solar Personalizada - Copel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4fdf7;
-      padding: 20px;
-    }
-    h1 {
-      color: darkgreen;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input, select {
-      width: 300px;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    button {
-      margin-top: 15px;
-      background-color: green;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #resultado {
-      margin-top: 30px;
-      padding: 20px;
-      background: #e8f9ed;
-      border-radius: 10px;
-    }
-    .alerta {
-      margin-top: 10px;
-      color: #a94442;
-      background-color: #f2dede;
-      padding: 10px;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <h1>Calculadora Solar - Curitiba (Base: Copel)</h1>
+import streamlit as st
+import math
 
-  <label for="consumo">Média de consumo mensal (kWh):</label>
-  <input type="number" id="consumo" value="64"/>
+st.set_page_config(page_title="Simulador Solar Curitiba", page_icon="🔆")
+st.title("🔆 Simulador de Energia Solar - Curitiba")
+st.markdown("""
+Este simulador estima o número de placas solares necessárias, o investimento aproximado e o tempo de retorno com base no seu consumo mensal.
+""")
 
-  <label for="tipo">Tipo de imóvel:</label>
-  <select id="tipo">
-    <option>Residencial</option>
-    <option>Comercial</option>
-    <option>Industrial</option>
-  </select>
+# Entradas do usuário
+consumo_kwh = st.number_input("⚡ Consumo mensal (kWh):", min_value=1, step=1, value=64)
+tipo_imovel = st.selectbox("🏠 Tipo de imóvel:", ["Residencial", "Comercial", "Industrial"])
 
-  <button onclick="calcular()">Calcular</button>
+# Preço médio por placa instalada em Curitiba (baseado em fontes de mercado)
+preco_placa = 1600
 
-  <div id="resultado"></div>
+# Considerações gerais
+producao_por_placa = 50  # kWh/mês por placa solar padrão
+custo_kwh = 0.77  # R$ por kWh (estimativa baseada na conta de energia Copel)
 
-  <script>
-    function calcular() {
-      const consumo = parseFloat(document.getElementById("consumo").value);
-      const tipo = document.getElementById("tipo").value;
+# Cálculos
+placas_necessarias = math.ceil(consumo_kwh / producao_por_placa)
+investimento_total = placas_necessarias * preco_placa
+economia_mensal = consumo_kwh * custo_kwh
 
-      const kWhPorPlaca = 50; // média Curitiba
-      const precoPorPlaca = 1600;
-      const tarifaKwh = 0.77; // com base na sua conta da Copel
+if economia_mensal == 0:
+    retorno_anos = 0
+else:
+    retorno_anos = investimento_total / (economia_mensal * 12)
 
-      const placas = Math.ceil(consumo / kWhPorPlaca);
-      const investimento = placas * precoPorPlaca;
-      const economia = consumo * tarifaKwh;
-      const retorno = (investimento / economia).toFixed(1);
+# Resultados
+st.markdown("""
+<div style="background-color:#eaffea; padding:20px; border-radius:10px">
+    <p><b>⚡ Consumo mensal:</b> {0} kWh</p>
+    <p><b>🏠 Tipo de imóvel:</b> {1}</p>
+    <p><b>🔋 Placas necessárias:</b> {2}</p>
+    <p><b>💰 Investimento estimado:</b> R$ {3:,.2f}</p>
+    <p><b>📉 Economia mensal:</b> R$ {4:,.2f}</p>
+    <p><b>⏳ Retorno estimado:</b> {5:.1f} anos</p>
+</div>
+""".format(consumo_kwh, tipo_imovel, placas_necessarias, investimento_total, economia_mensal, retorno_anos), unsafe_allow_html=True)
 
-      let resultadoHTML = `
-        <p>⚡️ <strong>Consumo mensal:</strong> ${consumo} kWh</p>
-        <p>🏠 <strong>Tipo de imóvel:</strong> ${tipo}</p>
-        <p>🔋 <strong>Placas necessárias:</strong> ${placas}</p>
-        <p>💰 <strong>Investimento estimado:</strong> R$ ${investimento.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
-        <p>📉 <strong>Economia mensal:</strong> R$ ${economia.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
-        <p>⏳ <strong>Retorno estimado:</strong> ${retorno} anos</p>
-      `;
-
-      if (retorno > 10) {
-        resultadoHTML += `<div class="alerta">⚠️ O tempo de retorno é superior a 10 anos. Verifique se o investimento é viável para o seu caso.</div>`;
-      }
-
-      document.getElementById("resultado").innerHTML = resultadoHTML;
-    }
-  </script>
-</body>
-</html>
+# Rodapé
+st.markdown("""
+---
+Desenvolvido por Lalinha ☀️ Curitiba 2025
+""")
