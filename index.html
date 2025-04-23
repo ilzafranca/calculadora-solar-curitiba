@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Solar Curitiba</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f8f4;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #2b7a0b;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      background: #2b7a0b;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .resultado {
+      margin-top: 30px;
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora Solar - Curitiba</h1>
+  <p>Preencha os dados abaixo para estimar o número de placas solares necessárias:</p>
+
+  <label for="consumo">Média de consumo mensal (kWh):</label>
+  <input type="number" id="consumo" required>
+
+  <label for="tipo">Tipo de imóvel:</label>
+  <select id="tipo">
+    <option value="residencial">Residencial</option>
+    <option value="comercial">Comercial</option>
+    <option value="predial">Prédio</option>
+  </select>
+
+  <button onclick="calcular()">Calcular</button>
+
+  <div class="resultado" id="resultado"></div>
+
+  <script>
+    function calcular() {
+      const consumo = parseFloat(document.getElementById("consumo").value);
+      const tipo = document.getElementById("tipo").value;
+      const irradiacaoCuritiba = 4.2; // kWh/m²/dia (média anual)
+      const diasMes = 30;
+
+      if (isNaN(consumo) || consumo <= 0) {
+        alert("Por favor, insira um valor de consumo válido.");
+        return;
+      }
+
+      const consumoDia = consumo / diasMes;
+      const eficienciaSistema = 0.8;
+      const potenciaPlaca = 0.34; // 340W = 0.34 kW por placa
+      const energiaPorPlacaDia = irradiacaoCuritiba * eficienciaSistema;
+      const energiaPorPlacaMes = energiaPorPlacaDia * diasMes;
+
+      const placasNecessarias = Math.ceil(consumo / energiaPorPlacaMes);
+      const investimentoPorPlaca = 1200; // valor médio estimado em reais
+      const investimentoTotal = placasNecessarias * investimentoPorPlaca;
+      const economiaMensal = consumo * 0.9; // considerando 90% de cobertura
+      const retornoAnos = investimentoTotal / (economiaMensal * 12);
+
+      document.getElement
