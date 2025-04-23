@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calculadora Solar - Curitiba</title>
+  <title>Calculadora Solar Personalizada - Copel</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -48,10 +48,10 @@
   </style>
 </head>
 <body>
-  <h1>Calculadora Solar - Curitiba</h1>
+  <h1>Calculadora Solar - Curitiba (Base: Copel)</h1>
 
   <label for="consumo">Média de consumo mensal (kWh):</label>
-  <input type="number" id="consumo" value="450"/>
+  <input type="number" id="consumo" value="64"/>
 
   <label for="tipo">Tipo de imóvel:</label>
   <select id="tipo">
@@ -69,13 +69,13 @@
       const consumo = parseFloat(document.getElementById("consumo").value);
       const tipo = document.getElementById("tipo").value;
 
-      const kWhPorPlaca = 50; // geração média mensal em Curitiba
+      const kWhPorPlaca = 50; // média Curitiba
       const precoPorPlaca = 1600;
-      const economiaPorPlaca = 45; // estimativa média de economia mensal
+      const tarifaKwh = 0.77; // com base na sua conta da Copel
 
       const placas = Math.ceil(consumo / kWhPorPlaca);
       const investimento = placas * precoPorPlaca;
-      const economia = placas * economiaPorPlaca;
+      const economia = consumo * tarifaKwh;
       const retorno = (investimento / economia).toFixed(1);
 
       let resultadoHTML = `
