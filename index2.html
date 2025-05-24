@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora Solar - Curitiba</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4fdf7;
+      padding: 20px;
+    }
+    h1 {
+      color: darkgreen;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 300px;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #resultado {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e8f9ed;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora Solar - Curitiba</h1>
+
+  <label for="consumo">Média de consumo mensal (kWh):</label>
+  <input type="number" id="consumo" value="450"/>
+
+  <label for="tipo">Tipo de imóvel:</label>
+  <select id="tipo">
+    <option>Residencial</option>
+    <option>Comercial</option>
+    <option>Industrial</option>
+  </select>
+
+  <button onclick="calcular()">Calcular</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function calcular() {
+      const consumo = parseFloat(document.getElementById("consumo").value);
+      const tipo = document.getElementById("tipo").value;
+
+      const kWhPorPlaca = 50; // geração média mensal em Curitiba
+      const precoPorPlaca = 1600;
+      const economiaPorPlaca = 45; // estimativa média de economia mensal
+
+      const placas = Math.ceil(consumo / kWhPorPlaca);
+      const investimento = placas * precoPorPlaca;
+      const economia = placas * economiaPorPlaca;
+
+      let resultadoHTML = `
+        <p>⚡️ <strong>Consumo mensal:</strong> ${consumo} kWh</p>
+        <p>🏠 <strong>Tipo de imóvel:</strong> ${tipo}</p>
+        <p>🔋 <strong>Placas necessárias:</strong> ${placas}</p>
+        <p>💰 <strong>Investimento estimado:</strong> R$ ${investimento.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
+        <p>📉 <strong>Economia mensal:</strong> R$ ${economia.toLocaleString("pt-BR", {minimumFractionDigits: 2})}</p>
+      `;
+
+      document.getElementById("resultado").innerHTML = resultadoHTML;
+    }
+  </script>
+</body>
+</html>
